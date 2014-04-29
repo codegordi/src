@@ -1,0 +1,79 @@
+#!/bin/bash
+
+##############################################################################
+#
+# remove_old_data - removes files older than [configurable] number of days
+#
+# remove_old_data [/path/to/target/dir] [int_days] [int_KB]
+#
+# EXAMPLE USAGE:
+#  $ remove_old_data /path/to/dir 3 2048
+#
+# ENV OPTIONS:
+#  VERBOSE - default is unset, any nonzero value sets verbose output, e.g:
+#    $ VERBOSE=1 remove_old_data /path/to/dir 3 2048
+#
+# BUGS:
+#   This program utilizes filesystem mtime.  Fielsystem mtime/atime is not
+#   always to be trusted as correct, (creation time is trustworthy).
+#
+# cgutierrez@
+#
+##############################################################################
+
+yell() { echo "$0: $*" >&2; }
+die() { yell "$*"; exit 111; }
+try() { "$@" || die "cannot $*"; }
+
+data_dir="$1"
+cutoff_days="$2"
+#: ${data_dir:="/mnt/DS/tmp"}
+max_dir_size="$3"
+
+size="`try du -ks $data_dir | awk '{print $1}'`"
+
+#[ -n "$VERBOSE" ] && yell "Directory size (in KB) : $size"
+
+if [ "$size" -gt $3 ]; then
+
+    if [ -n "$VERBOSE" ] ; then
+      yell "----------------------------------------------"
+      yell "Data directory : "$data_dir
+      yell "Cut-off days back : "$cutoff_days
+      yell "Max. directory size (in KB) : "$max_dir_size
+      yell "----------------------------------------------"
+    fi
+
+    [ -n "$VERBOSE" ] && yell "Current directory size (in KB) : $size"
+
+    file_list=(`find $data_dir -type f -mtime +$cutoff_days`);
+
+    #yell ${#file_list[@]}  # DEBUG line		
+
+    if [ ${#file_list[@]} -gt 0 ]; then
+       
+      if [ -n "$VERBOSE" ]; then 
+	yell "Files older than $cutoff_days days: "${file_list[@]}
+        read -p "Do you want to delete all these files? " -n 1 -r
+	
+	if [[ $REPLY =~ ^[Yy]$ ]]; then
+          yell "Deleting files more than $cutoff_days days old."
+	
+  	  #if [ -n "$VERBOSE" ] ; then
+            try find "$data_dir" -type f -mtime "+$cutoff_days" -print0 | xargs --verbose -0 rm
+        fi
+      
+      else
+	try find "$data_dir" -type f -mtime "+$cutoff_days" -print0 | xargs -0 rm
+      fi
+
+    else
+	[ -n "$VERBOSE" ] && yell "No files more than $cutoff_days days old."
+    fi
+  
+else
+    [ -n "$VERBOSE" ] && yell "Space available in $data_dir : No files deleted."
+fi
+
+
+true
