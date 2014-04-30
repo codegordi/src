@@ -16,7 +16,8 @@ library(lubridate)
 library(assertthat)
 library(stringr)
 library(scales)
+library(psych)
+library(SDMTools)
 
 home.dir = "/home/cgutierrez/"
 src.dir = "/home/cgutierrez/src/R/"
-
