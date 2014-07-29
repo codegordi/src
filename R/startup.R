@@ -19,5 +19,7 @@ library(scales)
 library(psych)
 library(SDMTools)
 
-home.dir = "/home/cgutierrez/"
-src.dir = "/home/cgutierrez/src/R/"
+#home.dir = "/home/cgutierrez/"  # Linux
+home.dir = "/Users/cgutierrez/"
+#src.dir = "/home/cgutierrez/src/R/"  # Linux
+src.dir = "/Users/cgutierrez/"
