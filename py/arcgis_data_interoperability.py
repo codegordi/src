@@ -1,3 +1,6 @@
+
+# https://geonet.esri.com/thread/65336 @hants_gisteam
+
 import arcgisscripting, string  
 gp = arcgisscripting.create(9.3)  
   
