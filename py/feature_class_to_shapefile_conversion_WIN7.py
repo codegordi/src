@@ -15,7 +15,7 @@ from arcpy import env
 
 my_env = ags.create(9.3)
 
-def listFcsInGDB(gdb):
+def list_fcs_in_fgdb(gdb):
     ''' list all Feature Classes in a geodatabase, including inside Feature Datasets '''
     ''' parm : gdb : your arcpy.env.workspace '''
     my_env.workspace = gdb
