@@ -5,7 +5,7 @@
 
 import os
 
-src_dir = os.getcwd()  # if run from ~/src/py
+src_dir = 'H:\src\py'  #os.getcwd()  # if run from ~/src/py
 cur_gdb = input('Dir path of File Geodatabase (.gdb) to convert: ')
 out_file = input('Dir path of converted output: ')
 

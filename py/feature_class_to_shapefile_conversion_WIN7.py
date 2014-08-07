@@ -18,15 +18,16 @@ my_env = ags.create(9.3)
 def list_fcs_in_fgdb(gdb):
     ''' list all Feature Classes in a geodatabase, including inside Feature Datasets '''
     ''' parm : gdb : your arcpy.env.workspace '''
+    print 'Working in environment : ', my_env.describe
     my_env.workspace = gdb
-    print 'Processing ', my_env.workspace
+    print 'Processing workspace : ', my_env.workspace
     fcs = [] 
     for fds in my_env.ListDatasets('','feature') + ['']:
         print fds
         for fc in my_env.ListFeatureClasses('','',fds):
             print fc
             #yield os.path.join(env.workspace, fds, fc)
-            fcs.append(os.path.join(fds, fc))
+            fcs.append(os.path.join(my_env.workspace, fds, fc))
     return fcs
 
 
