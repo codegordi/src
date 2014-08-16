@@ -11,11 +11,16 @@
 ehthumbs.db
 Thumbs.db
 
-# R session & data files #
-##########################
-
 
 # R session & data files #
 ##########################
 .RData
 .Rhistory
+
+
+# Haskell object & interface files #
+# > (should be in ~/bin)           #
+# < (; use -outputdir w ghc -o)    #
+####################################
+.o
+.hi
