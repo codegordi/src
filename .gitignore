@@ -21,6 +21,7 @@ Thumbs.db
 # Haskell object & interface files #
 # > (should be in ~/bin)           #
 # < (; use -outputdir w ghc -o)    #
+# > (; or _better_ use cabal)      #
 ####################################
 .o
 .hi
