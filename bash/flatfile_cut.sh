@@ -4,10 +4,15 @@
 #
 # flatfile_cut.sh
 #
-# flatfile_cut [/path/to/target/dir] file_extension
+# flatfile_cut [/path/to/target/dir] file_extension fields_to_extract \
+#     [delim] [out_file]
 #
 # EXAMPLE USAGE:
-#  $ flatfile_cut.sh /path/to/dir .ext
+#  $ flatfile_cut.sh /path/to/dir .psv '1,3-5,10' '|' cut_dat.out
+#  $ flatfile_cut.sh /path/to/dir .zip '1' ',' cut_dat.out
+#
+#  ! NOTE ! : Current implementation assumes a header in the flat file
+#             >> change/remove `sed "1 d"` phrase if no headers
 #
 # ENV OPTIONS:
 #  VERBOSE - default is unset, any nonzero value sets verbose output, e.g:
@@ -24,7 +29,8 @@ try() { "$@" || die "cannot $*"; }
 data_dir=${1:-$HOME"/projects"}
 file_ext=${2:-".zip"}
 fields_str=${3:-"1"}
-out_file=$4  # optional
+delim=${4:-","}
+out_file=$5  # optional
 
 
 if [ -n "$VERBOSE" ] ; then
@@ -37,16 +43,20 @@ fi
 
 case $file_ext in
   ".zip" )
-    file_list=(`find $data_dir -type f -name '*.zip' -print`);;
+    file_list=(`find ${data_dir} -type f -name '*.zip' -print`);;
   ".gzip" )
-    file_list=(`find $data_dir -type f -name '*.gz' -print`);;
+    file_list=(`find ${data_dir} -type f -name '*.gz' -print`);;
   ".bz" )
-    file_list=(`find $data_dir -type f -name '*.bz' -print`);;
+    file_list=(`find ${data_dir} -type f -name '*.bz' -print`);;
   ".csv" )
-    file_list=(`find $data_dir -type f -name '*.csv' -print`);;
+    file_list=(`find ${data_dir} -type f -name '*.csv' -print`);;
+  ".psv" )
+    file_list=(`find ${data_dir} -type f -name '*.psv' -print`);;
+  ".tsv" )
+    file_list=(`find ${data_dir} -type f -name '*.tsv' -print`);;
 esac
 
-[ -n "$VERBOSE" ] && yell "Number of files: "${#file_list[@]}  # DEBUG line		
+[ -n "$VERBOSE" ] && yell "Number of files: "${#file_list[@]} 
 
 if [ ${#file_list[@]} -gt 0 ] ; then
   for f in ${file_list[@]} ; do
@@ -54,16 +64,20 @@ if [ ${#file_list[@]} -gt 0 ] ; then
     [ -n "$VERBOSE" ] && yell $file_name
     case $file_ext in
       ".zip" )
-        try unzip -p $f | sed "1 d" | cut -d "," -f ${fields_str} | sed 's/^/'${file_name}',/' > $data_dir/$file_name.out ;; 
+        try unzip -p $f | sed "1 d" | cut -d ${delim} -f ${fields_str} | sed 's/^/'${file_name}',/' > ${data_dir}/${file_name}.out ;; 
       ".gz" )
-        try gzcat $f | sed "1 d" | cut -d "," -f ${fields_str} | sed 's/^/'${file_name}',/' > $data_dir/$file_name.out ;; 
+        try gzcat $f | sed "1 d" | cut -d ${delim} -f ${fields_str} | sed 's/^/'${file_name}',/' > ${data_dir}/${file_name}.out ;; 
       ".bz" )
-        try bzcat $f | sed "1 d" | cut -d "," -f${fields_str} | sed 's/^/'${file_name}',/' > $data_dir/$file_name.out ;; 
+        try bzcat $f | sed "1 d" | cut -d ${delim} -f${fields_str} | sed 's/^/'${file_name}',/' > ${data_dir}/${file_name}.out ;; 
       ".csv" )
-        try cat $f | sed "1 d" | cut -d "," -f${fields_str} | sed 's/^/'${file_name}',/' > $data_dir/$file_name.out ;;
+        try cat $f | sed "1 d" | cut -d "," -f${fields_str} | sed 's/^/'${file_name}',/' > ${data_dir}/${file_name}.out ;;
+      ".psv" )
+        try cat $f | sed "1 d" | cut -d "|" -f${fields_str} | sed 's/^/'${file_name}',/' > ${data_dir}/${file_name}.out ;;
+      ".tsv" )
+        try cat $f | sed "1 d" | cut -d "\t" -f${fields_str} | sed 's/^/'${file_name}',/' > ${data_dir}/${file_name}.out ;;
     esac
-    if [ $4 ] ; then
-      cat "$data_dir/$file_name.out" >> $4
+    if [ ${5} ] ; then
+      cat "${data_dir}/${file_name}.out" >> ${5}
     fi
   done
 else
