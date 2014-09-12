@@ -18,6 +18,8 @@
 #  VERBOSE - default is unset, any nonzero value sets verbose output, e.g:
 #    $ VERBOSE=1 flatfile_cut /path/to/dir
 #
+# TODO: Add checker on user parm _fields_str_, that its separator == _delim_
+#
 # cgutierrez@
 #
 ##############################################################################
@@ -32,6 +34,10 @@ fields_str=${3:-"1"}
 delim=${4:-","}
 out_file=$5  # optional
 
+if [ ${#field_str} > 3 && $field_str != *','* && $field_str == *${delim}* ] ; then
+  yell "Use the correct file delimiter in your cut fields parameter."
+  exit
+fi
 
 if [ -n "$VERBOSE" ] ; then
   yell "----------------------------------------------"
