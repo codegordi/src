@@ -20,11 +20,11 @@ memsave_loader <- function(infile, my.classes=NULL, n.rows0 = 100, n.rows, choos
   comment.char <- ""
   # set nrows to save memory
   if ( choose.rows == FALSE ) {
-    initial <- read.table(infile, nrows = n.rows0, sep = sep, stringsAsFactors = str.as.fact)  # input limited amount of data
+    initial <- read.table(infile, nrows = n.rows0, sep = sep, stringsAsFactors = str.as.fact, na.strings=c("NA", ""))  # input limited amount of data
     print("First read-through. Initialized.")
   }
   else {
-    initial <- read.table(infile, nrows = n.rows, skip = max.rows - 100, sep = sep, stringsAsFactors = str.as.fact)
+    initial <- read.table(infile, nrows = n.rows, skip = max.rows - 100, sep = sep, stringsAsFactors = str.as.fact, na.strings=c("NA", ""))
   } 
   # determine classes
   if ( is.null(my.classes) | length(my.classes) < ncol(initial) ) {
@@ -36,9 +36,9 @@ memsave_loader <- function(infile, my.classes=NULL, n.rows0 = 100, n.rows, choos
   }
   # load file
   if ( !is.null(n.rows) ) {
-    tab.all <- read.table(infile, nrows = n.rows, colClasses = classes, header = head, sep = sep)
+    tab.all <- read.table(infile, nrows = n.rows, colClasses = classes, header = head, sep = sep, na.strings=c("NA", ""))
   } else {
-    tab.all <- read.table(infile, colClasses = classes, header = head, sep = sep)
+    tab.all <- read.table(infile, colClasses = classes, header = head, sep = sep, na.strings=c("NA", ""))
   }
   print("Done loading. (Whew ....)")
   return(tab.all)
