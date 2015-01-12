@@ -51,8 +51,6 @@ if [ "$size" -gt $4 ]; then
 
   file_list=(`find $data_dir -type f -name "*$fext" -mtime +"$cutoff_days"`);   
 
-  yell ${#file_list[@]}  # DEBUG line		
-
   if [ ${#file_list[@]} -gt 0 ]; then
        
     if [ -n "$VERBOSE" ]; then 
