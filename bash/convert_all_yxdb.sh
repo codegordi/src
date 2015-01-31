@@ -48,7 +48,8 @@ if [ -d "$sourced" ] && [ -d "$targetd" ]; then
     tfname=$(basename "$f")
     tfname="${tfname%.*}"
     yell "$tfname"  # DEBUG
-    try /home/mburge/bin/yxdb2csv "${f}" | gzip > "${targetd}${tfname}".psv.gz
+    # https://github.com/MichaelBurge/yxdb-utils
+    try /home/mburge/bin/yxdb2csv "${f}" | gzip -f > "${targetd}${tfname}".psv.gz
     try gzip -f "${f}"
   done
   try echo '' | mail -s 'File conversion from yxdb format to flat format - DONE' "$mail_to"
