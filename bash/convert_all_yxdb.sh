@@ -40,16 +40,21 @@ fext=".yxdb"
 file_list=(`find "$sourced" -type f -name "*$fext"`);
 
 if [ -d "$sourced" ] && [ -d "$targetd" ]; then 
-  yell "Directories to convert (from-to) : "${sourced}"*"${fext}" ==> "${targetd}"*.psv.gz"  # DEBUG
-  yell "Send to (notify) : "${mail_to}  # DEBUG
+  yell "Directories to convert (from-to) : "${sourced}"*"${fext}" ==> "${targetd}"*.psv.gz"
+  yell "Send to (notify) : "${mail_to}
   yell "Files of type $fext : "$'\n'${file_list[@]}
+  
+  if [ "$targetd" == "." ]; then
+    targetd=$targetd"/"
+  fi
+
   for f in ${file_list[@]}
   do
     tfname=$(basename "$f")
     tfname="${tfname%.*}"
-    yell "$tfname"  # DEBUG
+    #yell "$tfname"  # DEBUG
     # https://github.com/MichaelBurge/yxdb-utils
-    try /home/mburge/bin/yxdb2csv "${f}" | gzip -f > "${targetd}${tfname}".psv.gz
+    try ~/bin/hs/yxdb2csv "${f}" | gzip -f > "${targetd}""${tfname}".psv.gz
     try gzip -f "${f}"
   done
   try echo '' | mail -s 'File conversion from yxdb format to flat format - DONE' "$mail_to"
