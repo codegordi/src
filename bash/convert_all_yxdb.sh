@@ -1,12 +1,12 @@
 #!/bin/bash
 ###########################################################
 #
-# convert_files.sh
+# convert_all_yxdb.sh
 #
 #  > wrapper for mburge's yxdb2csv.hs app 
 #  > >> compresses input file and stdout via gzip
 #
-#  > usage : convert_files.sh <source> <target> [<email>]
+#  > usage : convert_all_yxdb.sh <source> <target> [<email>]
 #  >		where <source> is the relative or full path
 #  >		of the file to convert
 #  >		and <target> is the path to write to
