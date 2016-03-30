@@ -21,8 +21,11 @@ library(SDMTools)
 library(matrixStats)
 
 #home.dir = "/home/cgutierrez/"  # Linux
-home.dir = "/Users/cgutierrez"  # Mac OS
+home.dir = "/Users/cristiana"  # my Mac OS
 #src.dir = "/home/cgutierrez/src/R/"  # Linux
-src.dir = "/Users/cgutierrez/src/R"  # Mac OS
+src.dir = "/Users/cristiana/src/R"  # my Mac OS
 
 source(paste0(src.dir, "/tic_toc.R"))  # load poor-wo/man's benchmarking functions
+## if want to change wd at site level - edit @ cmd line
+# sudo vi /etc/R/Rprofile.site
+# setwd("/Users/cristiana/src/R")
